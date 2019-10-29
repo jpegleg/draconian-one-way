@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# If you can't use PGP/GNUPG and you can use openssl or libressl,
+# then this is a way to encrypt files for another person or system.
+
+# ./rsa.pub must be the public key created from a private key,
+# where the private key is on the server or with the person that does the decryption.
+# Also see https://github.com/jpegleg/metarc for more related functions and usage info.
+
+# osenc-passgen
+osenc-enc-pass () {
+  openssl rand -base64 32 > key.bin
+  openssl rsautl -encrypt -inkey rsa.pub -pubin -in key.bin -out key.bin.enc
+}
+
+# osenc my-secretfile.txt mysecretfile.txt.asc
+osenc-file () {
+  openssl enc -aes256 -base64 -salt -in $1 -out $2 -pass file:./key.bin
+}
+
+osenc-enc-pass
+cp key.bin.enc $(openssl md5 key.bin.enc | cut -d' ' -f2).key.bin.enc
+
+osenc-file $1 $2
+
+# Wipe out your copy of key.bin
+cp /dev/null key.bin # feel free to shred/repeat write etc
+
+
+# Remove the original file
+rm -f $1
+
