@@ -19,14 +19,12 @@ osenc-file () {
 }
 
 osenc-enc-pass
-cp key.bin.enc $(openssl md5 key.bin.enc | cut -d' ' -f2).key.bin.enc
 
 osenc-file $1 $2
+cp key.bin.enc $(openssl md5 $2 | cut -d' ' -f2).key.bin.enc
 
 # Wipe out your copy of key.bin
 cp /dev/null key.bin # feel free to shred/repeat write etc
 
-
 # Remove the original file
 rm -f $1
-
