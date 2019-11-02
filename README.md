@@ -13,18 +13,30 @@ then encrypt files already encrypted by a process like this with gpg. The idea t
 rather than just one, say if you have a powerful and/or patient adversary or adversaries. Most of the time just encrypting with AES256 is all you need, but if your enemy has the time and the compute power and there is a need to escalate the security, stack up on encryption layers. When you have to make several layers, openssl/libressl can be a nice addition to the mix along with gpg etc.
 
 Here is an example wrapper that takes the castle-encrypt script encrypted output and ships it off:
+
 /usr/local/sbin/castle-encrypt /home/thane/logs.$(date +%Y%m%d).tgz /home/thane/logs.$(date +%Y%m%d).tgz.asc
+
 mv /root/*.key.bin.enc /mnt/stor/
+
 mv /home/thane/logs.$(date +%Y%m%d).tgz.asc /mnt/stor/
+
 find /mnt/stor/ -mtime +1 -exec rm -f {} \;
 
-Then on a remote system that has the private RSA key, or yet another server entirely, you might collect the data from /mnt/store/
+
+Then on a remote system that has the private RSA key, or yet another server entirely, you might collect the data from 
+
+/mnt/store/
+
 and then gpg it up once per whenever you sync up with the other system. Like have the castle-encrypt run every day at 5:24 AM, and then this next system collecting them at 5:30 AM on Sundays.
 
 rsync -raz --stats --progress thatotherserver://mnt/stor/* /pull/stor/
+
 tar czvf /var/stor/data/store.tgz /pull/stor/*
+
 gpg -r keegan.bowen@gmail.com --yes --batch --armor --encrypt /var/store/data/store.tgz
+
 shred -v -n 25 -u -z /pull/stor/*
+
 shred -v -n 25 -u -z /var/store/data/store.tgz
 
 Perhaps the private gpg key is on a yubikey and the private rsa key is on a non-networked physically secure workstation that you have to take the yubikey with the private gpg key, and a "secure" USB drive or drive mount with the twice encrypted data, to decrypt all the way if you need to check on something or otherwise analyze the data. Copy the twice encrypted data from the USB drive to the secure workstation, plug in the yubikey to decrypt the tarball, then run (another program joining this repository soon) that decrypts the tarballs encrypted by the key.bin in castle-encrypt openssl/libressl, in a batch and/or by picking specific type frames based on data file name. Then of course cleaning up after yourself and securely removing the data when you are done with the analysis etc :)
