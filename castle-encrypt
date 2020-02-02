@@ -32,11 +32,16 @@ osenc-enc-pass
 osenc-file $1 $2
 cp key.bin.enc $(openssl md5 $2 | cut -d' ' -f2).key.bin.enc
 
-# Wipe out your copy of key.bin and original file
+# Wipe out your copy of key.bin and original file.
+# If you don't have the shred program, do some overwriting at least...
 shredd=$(which shred)
 if [ $shredd -z ]; then
- cp /dev/null key.bin 
- cp /dev/null $1
+  openssl rand -base64 900000 > key.bin
+  echo 0 > key.bin
+  openssl rand -base64 900000 > $1
+  echo 0 > $1
+  cp /dev/null key.bin 
+  cp /dev/null $1
 else
   target=key.bin
   shredd
