@@ -18,17 +18,17 @@ The draconian-one-way includes two scripts, one to use openssl aes256 to encrypt
 
 
 # draconian-one-way: castle-encrypt
-If for some reason a machine can't use PGP/GNUPG, but can use openssl/libressl, I made the this collection of scripts and tools.
+If for some reason a machine can't use PGP/GNUPG, but can use openssl/libressl, then at least you can use castle-encrypt.
 
 Also see https://github.com/jpegleg/metarc for more related functions and usage info.
 
 This software does not contain any encryption software, just ways to automate or simplify other cryptographic software that is not included here but referenced. Examples: openssl, libressl, gpg, pgp...
 
-This castl-encrypt concept might be used for some ancient UNIX or odd build that conflicts with or can't run GNUPG, and doesn't/can't use PGP5 etc.
+This castle-encrypt concept might be used for some ancient UNIX or odd build that conflicts with or can't run GNUPG, and doesn't/can't use PGP5 etc.
 You will need (another system, token, person) that has the private RSA key that generated the public key used by the castle-encrypt script, otherwise all of the data will be lost.
 
 Another reason why you might go down this path is that you want to add layers of encryption. You might want to do this,
-then encrypt files already encrypted by a process like this with gpg. The idea there is that both cryptosystems have be thwarted
+then encrypt files already encrypted by a process like this with gpg, such as with moat-encrypt script. The idea there is that both cryptosystems have be thwarted
 rather than just one, say if you have a powerful and/or patient adversary or adversaries. Most of the time just encrypting with AES256 is all you need, but if your enemy has the time and the compute power and there is a need to escalate the security, stack up on encryption layers. When you have to make several layers, openssl/libressl can be a nice addition to the mix along with gpg etc.
 
 Here is an example wrapper that takes the castle-encrypt script encrypted output and ships it off:
