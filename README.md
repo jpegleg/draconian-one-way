@@ -20,8 +20,9 @@ The draconian-one-way includes two scripts, one to use openssl aes256 to encrypt
 After you complete your encryptions, you might move your encrypted tbin file off the server that stores the data to another safe location, shredding the copy of those as well:
 
 
-  scp mykey.asc user@safeserver:/var/storage/key-files/01/
-  shred -v -n 25 -u -z mykey.asc
+  scp 424083f13cd57913bce33fe7bb3aad71.key.bin.enc user@safeserver:/var/storage/key-files/01/
+  
+  shred -v -n 25 -u -z 424083f13cd57913bce33fe7bb3aad71.key.bin.enc
 
 
 # about the scripts
