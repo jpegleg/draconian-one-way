@@ -18,35 +18,28 @@ osenc-file () {
   openssl enc -aes256 -base64 -pbkdf2 -salt -in $1 -out $2 -pass file:./key.bin
 }
 
-shred () {
+# If you don't have the shred program, do some overwriting at least...
+shredda () {
 shredd=$(which shred)
 if [ $shredd -z ]; then
- cp /dev/null $target 
-
+   openssl rand -base64 900000 > $target
+   echo 0 > $target
+   cp /dev/null $target
 else
   shred -v -n 25 -u -z $target
 fi
 }
-osenc-enc-pass
 
+# create key.bin and encrypt a copy of it
+osenc-enc-pass
+# encrypt your first argument, write out to second argument
 osenc-file $1 $2
 cp key.bin.enc $(openssl md5 $2 | cut -d' ' -f2).key.bin.enc
 
 # Wipe out your copy of key.bin and original file.
-# If you don't have the shred program, do some overwriting at least...
-shredd=$(which shred)
-if [ $shredd -z ]; then
-  openssl rand -base64 900000 > key.bin
-  echo 0 > key.bin
-  openssl rand -base64 900000 > $1
-  echo 0 > $1
-  cp /dev/null key.bin 
-  cp /dev/null $1
-else
-  target=key.bin
-  shredd
-  target=$1
-  shredd
-fi
+target=$1
+shredda
+target=key.bin
+shredda
 
- rm -f $1 2>/dev/null
+rm -f $1 2>/dev/null
