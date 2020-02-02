@@ -17,6 +17,15 @@ The draconian-one-way includes two scripts, one to use openssl aes256 to encrypt
 /usr/local/sbin/moat-encrypt /home/thane/logs.$(date +%Y%m%d).tgz.asc.gpg.asc root-example@hsm-thingy-stor-example
 
 
+After you complete your encryptions, you might move your encrypted tbin file off the server that stores the data to another safe location, shredding the copy of those as well:
+
+
+  scp mykey.asc user@safeserver:/var/storage/key-files/01/
+  shred -v -n 25 -u -z mykey.asc
+
+
+# about the scripts
+
 # draconian-one-way: castle-encrypt
 If for some reason a machine can't use PGP/GNUPG, but can use openssl/libressl, then at least you can use castle-encrypt.
 
