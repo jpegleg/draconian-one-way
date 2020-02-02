@@ -70,4 +70,4 @@ Generate the private gpg key somewhere else safe, or on a liveboot image.
 Then bring over the public key to a file called pub.asc
 Import pub.asc into user keyring and then call the moat-encrypt script like this:
 
-./moat-encrypt somefile.tbin adminbobperson@something.place.example.com
+/usr/local/sbin/moat-encrypt somefile.tbin adminbobperson@something.place.example.com
