@@ -62,7 +62,7 @@ rsync -raz --stats --progress thatotherserver://mnt/stor/* /pull/stor/
 
 tar czvf /var/stor/data/store.tgz /pull/stor/*
 
-gpg -r keegan.bowen@gmail.com --yes --batch --armor --encrypt /var/store/data/store.tgz
+gpg -r root@example --yes --batch --armor --encrypt /var/store/data/store.tgz
 
 shred -v -n 25 -u -z /pull/stor/*
 
