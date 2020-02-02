@@ -18,19 +18,30 @@ osenc-file () {
   openssl enc -aes256 -base64 -pbkdf2 -salt -in $1 -out $2 -pass file:./key.bin
 }
 
+shred () {
+shredd=$(which shred)
+if [ $shredd -z ]; then
+ cp /dev/null $target 
+
+else
+  shred -v -n 25 -u -z $target
+fi
+}
 osenc-enc-pass
 
 osenc-file $1 $2
 cp key.bin.enc $(openssl md5 $2 | cut -d' ' -f2).key.bin.enc
 
-# Wipe out your copy of key.bin
+# Wipe out your copy of key.bin and original file
 shredd=$(which shred)
 if [ $shredd -z ]; then
- cp /dev/null key.bin # alternate to the shred
+ cp /dev/null key.bin 
+ cp /dev/null $1
 else
-  # use this to really get that data wiped from disk well, comment out for speed increase
-  shred -v -n 25 -u -z 
+  target=key.bin
+  shredd
+  target=$1
+  shredd
 fi
 
-# Try to remove the original file always, again if shred
-rm -f $1 2>/dev/null
+ rm -f $1 2>/dev/null
